@@ -22,7 +22,7 @@
                     <li v-for="(list_value, list_key) in list" :key="list_key">
                         <div>{{list_value}}</div>
                         <div>
-                            <el-button icon="el-icon-search" size="mini" circle></el-button>
+                            <el-button icon="el-icon-search" size="mini" circle @click="search(list_value)"></el-button>
                             <!-- <el-button type="warning" icon="el-icon-star-off" size="mini"  circle></el-button> -->
                             <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="del_order(menu_key, list_value)"></el-button>
                         </div>
@@ -58,6 +58,9 @@ export default {
                     return e !== value;
                 })
             }
+        },
+        search (value) {
+            window.open(`http://www.baidu.com/s?wd=${value}`);
         }
     },
     name: 'meterial',

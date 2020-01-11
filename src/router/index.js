@@ -22,7 +22,8 @@ let pages = [
         path: '/order',
         title: 'order',
         component: order,
-    }
+    },
+
     
 ];
 
