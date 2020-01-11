@@ -27,9 +27,6 @@
                             <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="del_order(menu_key, list_value)"></el-button>
                         </div>
                     </li>
-                    <li>
-                         <el-button type="primary" plain>+</el-button>
-                    </li>
                 </ul> 
             </el-tab-pane>
         </el-tabs>

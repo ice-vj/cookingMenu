@@ -29,9 +29,9 @@
                             <!-- <el-button type="danger" icon="el-icon-delete" size="mini" circle></el-button> -->
                         </div>
                     </li>
-                    <li>
+                    <!-- <li>
                          <el-button type="primary" plain>+</el-button>
-                    </li>
+                    </li> -->
                 </ul> 
             </el-tab-pane>
         </el-tabs>
