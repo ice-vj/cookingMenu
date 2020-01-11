@@ -1,12 +1,12 @@
 <template>
   <div class="meterial">
-        <h1 style="color: #258; width: 100px;  margin: auto" >菜单</h1>
+        <h1 style="color: #258; width: 100px;  margin: auto" >订单</h1>
        
-        <router-link to="/" >
+        <router-link to="/menu" >
             <el-page-header class="back"></el-page-header>
         </router-link>
         <router-link to="/order" >
-            <span class="basket">订单<i class="el-icon-notebook-2"></i></span>
+            <span class="basket"></span>
         </router-link>
         
         <!-- <ul class="menu_selet">
@@ -17,14 +17,14 @@
         </ul> -->
  
         <el-tabs type="border-card" class="menu_selet">
-            <el-tab-pane v-for="(menu_value, menu_key) in menu" :key="menu_key" :label="menu_key" :tab-click="show_list(menu_key)">
+            <el-tab-pane v-for="(menu_value, menu_key) in order" :key="menu_key" :label="menu_key" :tab-click="show_list(menu_key)">
                  <ul class="menu_list"> 
                     <li v-for="(list_value, list_key) in list" :key="list_key">
                         <div>{{list_value}}</div>
                         <div>
-                            <el-button icon="el-icon-search" size="mini" circle ></el-button>
-                            <el-button type="warning" icon="el-icon-star-off" size="mini"  circle  @click="add_order(menu_key, list_value)"></el-button>
-                            <!-- <el-button type="danger" icon="el-icon-delete" size="mini" circle></el-button> -->
+                            <el-button icon="el-icon-search" size="mini" circle></el-button>
+                            <!-- <el-button type="warning" icon="el-icon-star-off" size="mini"  circle></el-button> -->
+                            <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="del_order(menu_key, list_value)"></el-button>
                         </div>
                     </li>
                     <li>
@@ -37,24 +37,26 @@
 </template>
 
 <script>
-import menu from "../store/menuData";
 import order from "../store/order";
+
 
 export default {
     data() {
         return {
-            menu: menu,
-            list: menu.a,
             order: order,
+            list: order.a
         }
     },
     methods: {
         show_list (key) {
-            this.list = menu[key];
+            this.list = order[key];
         },
-        add_order (key, value) {
-            if (!this.order[key].includes(value)) {
-                this.order[key].push(value);
+        del_order (key, value) {
+            
+            if (this.order[key].includes(value)) {
+                this.order[key] = this.order[key].filter(e => {
+                    return e !== value;
+                })
             }
         }
     },

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import home from '../components/homePage.vue';
 import menu from '../menus/menu.vue';
+import order from '../menus/order.vue';
 
 // 导入路由配置对象
 let pages = [
@@ -16,6 +17,11 @@ let pages = [
         path: '/menu',
         title: 'menu',
         component: menu,
+    },
+    {
+        path: '/order',
+        title: 'order',
+        component: order,
     }
     
 ];
