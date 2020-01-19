@@ -4,7 +4,56 @@
     margin-left: 5%;
     width: 200px;
 }
+
+.menu_selet {
+    list-style: none;
+    margin-left: 5%;
+    margin-top: 12%;
+    overflow: hidden;
+}
+
+.menu_selet > li {
+    height: auto;
+    width: 100px;
+    border: 1px solid gray;
+    color: red;
+    text-align: center;
+    float: left;
+}
+
+.menu_list {
+    list-style: none; 
+    display: flex;
+    flex-wrap: wrap; 
+}
+
+.menu_list > li {
+    height: auto;
+    width: 300px;
+    display: flex;
+    justify-content:space-between;
+    margin-top: 20px;
+    margin-right: 75px; 
+    color: #40A0FF;
+    align-items: center;
+}
+
+.el-button--primary {
+    width: 150px;
+}
+.el-tabs {
+    width: 80%;
+}
+
 .basket {
     margin-left: 82%;
     width: 200px;
+    font-size: 15px;
+    color:#40A0FF;
+}
+
+a {
+  font-size: 15px;
+  text-decoration:none;
+  color:#40A0FF;
 }

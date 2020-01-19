@@ -27,6 +27,7 @@ export default {
   text-align: center;
 }
 a {
+  font-size: 30px;
   color: red;
 }
 </style>

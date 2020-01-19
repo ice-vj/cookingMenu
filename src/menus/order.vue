@@ -2,29 +2,24 @@
   <div class="meterial">
         <h1 style="color: #258; width: 100px;  margin: auto" >订单</h1>
        
-        <router-link to="/menu" >
-            <el-page-header class="back"></el-page-header>
-        </router-link>
-        <router-link to="/order" >
-            <span class="basket"></span>
-        </router-link>
+         <div style="display: felx; margin-top:8%; margin-left:5%; width: 80%;">
+            <div style="float:left">
+                <router-link to="/menu" >
+                    <el-row >
+                        <el-button type="primary">返回 <i class="el-icon-back"></i></el-button>
+                    </el-row>
+                </router-link>
+            </div>
+        </div>
         
-        <!-- <ul class="menu_selet">
-            <li v-for="(value, key) in menu" :key="key" @click="show_list(key)">{{key}}</li>
-        </ul>
-        <ul class="menu_list"> 
-            <li v-for="(value, key) in list" :key="key">{{value}}</li>
-        </ul> -->
- 
-        <el-tabs type="border-card" class="menu_selet">
-            <el-tab-pane v-for="(menu_value, menu_key) in order" :key="menu_key" :label="menu_key" :tab-click="show_list(menu_key)">
+        <el-tabs type="border-card" class="menu_selet" @tab-click="show_list">
+            <el-tab-pane v-for="(type, index) in types" :key="index" :label="type" >
                  <ul class="menu_list"> 
-                    <li v-for="(list_value, list_key) in list" :key="list_key">
-                        <div>{{list_value}}</div>
+                    <li v-for="(list_value, list_key) in order" :key="list_key">
+                        <div>{{list_value.name}}</div>
                         <div>
-                            <el-button icon="el-icon-search" size="mini" circle @click="search(list_value)"></el-button>
-                            <!-- <el-button type="warning" icon="el-icon-star-off" size="mini"  circle></el-button> -->
-                            <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="del_order(menu_key, list_value)"></el-button>
+                            <el-button icon="el-icon-search" size="mini" circle @click="search(list_value.name)"></el-button>
+                            <el-button type="danger" icon="el-icon-delete" size="mini" circle  @click="del_order(list_value)"></el-button>
                         </div>
                     </li>
                 </ul> 
@@ -34,28 +29,48 @@
 </template>
 
 <script>
-import order from "../store/order";
-
+import { mapActions } from 'vuex';
 
 export default {
     data() {
         return {
-            order: order,
-            list: order.a
+            order: [],
+            currtype: '',
+            types: []
         }
     },
+
+    async created () {
+        await this.get_types();
+        this.show_list({label: this.types[0]});
+        this.currType = this.types[0];
+    },
+
     methods: {
-        show_list (key) {
-            this.list = order[key];
-        },
-        del_order (key, value) {
-            
-            if (this.order[key].includes(value)) {
-                this.order[key] = this.order[key].filter(e => {
-                    return e !== value;
-                })
+        ...mapActions(['getOrder', 'delOrder', 'getTypes']),
+
+        async show_list (tab) {
+            let res = await this.getOrder({type: tab.label});
+            res = res.data;
+            if (res.code === 0) {
+                this.order = res.data;
+                this.currType = tab.label;   
             }
         },
+
+        async get_types () {
+            let res = await this.getTypes();
+            res = res.data;
+            if (res.code === 0) {
+                this.types = res.data;
+            }
+        },
+
+        async del_order ({_id, type}) {
+            await this.delOrder({_id, type});
+            this.show_list({label: type});
+        },
+
         search (value) {
             window.open(`http://www.baidu.com/s?wd=${value}`);
         }
@@ -70,54 +85,10 @@ export default {
 <style scoped>
 @import "../css/list.css";
 
-.menu_selet {
-    list-style: none;
-    margin-left: 5%;
-    margin-top: 1%;
-    overflow: hidden;
-}
-
-.menu_selet > li {
-    height: auto;
-    width: 100px;
-    border: 1px solid gray;
-    color: red;
-    text-align: center;
-    float: left;
-}
-
-.menu_list {
-    list-style: none; 
-    display: flex;
-    flex-wrap: wrap; 
-}
-
-.menu_list > li {
-    height: auto;
-    width: 300px;
-    display: flex;
-    justify-content:space-between;
-    margin-top: 20px;
-    margin-right: 75px; 
-    color: #40A0FF;
-    align-items: center;
-}
 
 .el-button--default {
     color: #fff;
     background: #40A0FF;
 }
 
-.el-button--primary {
-    width: 150px;
-}
-.el-tabs {
-    width: 80%;
-}
-
-a {
-  font-size: 15px;
-  text-decoration:none;
-  color:#40A0FF;
-}
 </style>
