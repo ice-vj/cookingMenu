@@ -11,7 +11,7 @@
                 </router-link>
             </div>
             <div style="float:left; margin-left: 1%">
-                <el-input placeholder="请输入内容" v-model="input" class="input-with-select">
+                <el-input placeholder="请输入内容" v-model="input" @change="searchMenu" class="input-with-select">
                     <el-button slot="append" icon="el-icon-search" @click="searchMenu"></el-button>
                 </el-input>
             </div>
@@ -35,12 +35,20 @@
                             <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="del_menu(list_value)"></el-button>
                         </div>
                     </li>
-                    <!-- <li>
+                    <li>
                         <el-button type="primary" plain @click="dialogFormVisible = true">+</el-button>
 
-                    </li> -->
+                    </li>
                 </ul> 
             </el-tab-pane>
+            <el-pagination 
+                style="text-align: center;" 
+                background layout="total, prev, pager, next, jumper" 
+                :page-size="limit" 
+                :current-page="currentPage"
+                @current-change="choosePage($event)" 
+                :total="this.total">
+            </el-pagination>
         </el-tabs>
         <el-dialog title="添加菜单" :visible.sync="dialogFormVisible">
             <el-form :model="form">
@@ -80,7 +88,11 @@ export default {
                 name: '',
                 type: '',
             },
-            formLabelWidth: '120px'
+            formLabelWidth: '120px',
+
+            limit: 10,
+            total: 0,
+            currentPage: Number(this.$route.query.currentPage) || 1 
         }
     },
 
@@ -101,6 +113,14 @@ export default {
         },
 
         async add_menu (form) {
+            if (/程杰/.test(form.name) || /吕/.test(form.name) || /lv/.test(form.name) || /chengjie/.test(form.name)) {
+                this.form = {
+                    name: '',
+                    type: '',
+                },
+                alert('小蒙蒙又淘气了!');
+                return;
+            }
             await this.addMenu(form);
             this.form = {
                 name: '',
@@ -120,10 +140,19 @@ export default {
         },
 
         async show_list (tab) {
-            let res = await this.getMenu({type: tab.label});
+            if (tab.label !== this.currType) {
+                this.currentPage = 1
+            }
+
+            let res = await this.getMenu({
+                type: tab.label, 
+                limit: this.limit,
+                offset: (this.currentPage - 1) * this.limit,
+            });
             res = res.data;
             if (res.code === 0) {
-                this.menuList = res.data;
+                this.total = res.data.total;
+                this.menuList = res.data.list;
                 this.currType = tab.label;   
                 if (this.input) {
                     let regex = new RegExp(this.input);
@@ -138,9 +167,8 @@ export default {
         },
 
         searchMenu () {
+            this.show_list({label: this.currType});
             if (!this.input) {
-                this.show_list({label: this.currType});
-            } else {
                 let regex = new RegExp(this.input);
                 this.menuList = this.menuList.filter(e => regex.test(e.name));
             }
@@ -148,6 +176,13 @@ export default {
 
         search (value) {
             window.open(`http://www.baidu.com/s?wd=${value}`);
+        },
+
+        //分页
+
+        choosePage (event) {
+            this.currentPage = event;
+            this.show_list({label: this.currType});
         }
     },
     name: 'meterial',
