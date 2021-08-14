@@ -14,6 +14,9 @@ import Vue from 'vue';
 
 export default {
     actions: {
+        initTypes () {
+            return Vue.http.post('/cmp_api/types/init');
+        },
 
         getTypes () {
             return Vue.http.get('/cmp_api/types');

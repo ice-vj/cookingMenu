@@ -1,7 +1,7 @@
 // 代理配置模块环境变量 local
 const proxyTarget = function (target) {
     return {
-        target: target || 'http://vj.aptx.com:8080',
+        target: target || 'http://localhost:8080',
         changeOrigin: true,
         onError: function (err) {
             console.log(err);
@@ -21,7 +21,7 @@ module.exports = {
             ...[
                 // CMP API
                 '/cmp_api',
-            ].reduce((a, b) => (a[b] = proxyTarget('http://vj.aptx.com:8080'), a), {}),
+            ].reduce((a, b) => (a[b] = proxyTarget('http://localhost:8080'), a), {}),
         }
     }
 };

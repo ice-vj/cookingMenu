@@ -98,12 +98,32 @@ export default {
 
     async created () {
         await this.get_types();
+        if (!this.types || !this.types.length) await this.init_types();
         this.show_list({label: this.types[0]});
         this.currType = this.types[0];
     },
 
     methods: {
-        ...mapActions(['getMenu', 'addMenu', 'editMenu', 'delMenu', 'addOrder', 'getTypes']),
+        ...mapActions(['getMenu', 'addMenu', 'editMenu', 'delMenu', 'addOrder', 'initTypes', 'getTypes']),
+        async init_types () {
+             this.types = [
+                '特色',
+                '肉类',
+                '蛋炒',
+                '素菜',
+                '凉菜',
+                '汤粥',
+                '主食',
+            ]
+            let res = await this.initTypes();
+    
+            console.log('res', res)
+            res = res.data;
+            if (res.code === 0) {
+                this.types = res.data;
+            }
+        },
+
         async get_types () {
             let res = await this.getTypes();
             res = res.data;
